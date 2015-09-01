@@ -77,4 +77,4 @@ while ($t = $db->FetchRow($result)) {
 #echo '<pre>';print_r($tasks[2]);die();
 $total=count($tasks);
 $page->uses('tasks','total','visible');
-$page->pushTpl('tree.tpl');
+$page->pushTpl('gantt.tpl');
