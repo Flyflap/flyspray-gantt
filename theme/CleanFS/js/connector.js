@@ -1,4 +1,4 @@
-var pj,o,c;
+var pj,o,c,due;
 
 function init(){
 
@@ -83,6 +83,7 @@ function reconnect(){
 	lw=document.getElementById('lines').clientWidth;
 	hs=16;
 	he=2;
+	hm=8; // vert middle
 	h=5;
 	for (i = 0, len = c.length; i < len; ++i) {
 		context.beginPath();
@@ -117,6 +118,21 @@ function reconnect(){
 		context.moveTo(xs, ys);
 		context.bezierCurveTo((xs+xe)/2, ys, (xs+xe)/2, ye, xe, ye);
 		context.stroke();
+	}
+
+	for (i = 0, len = due.length; i < len; ++i) {
+		context.beginPath();
+		context.strokeStyle = "rgba(255,127,0,1)";
+		xs=document.getElementById(due[i].tsrc).offsetLeft + document.getElementById(due[i].tsrc).offsetWidth;
+		ys=document.getElementById(due[i].tsrc).offsetTop - document.getElementById(due[i].tsrc).parentNode.scrollTop+2;
+		xe=document.getElementById(due[i].tsrc).offsetLeft + document.getElementById(due[i].tsrc).offsetWidth+200;
+		ye=ys;
+		context.moveTo(xs, ys);
+		context.bezierCurveTo((xs+xe)/2, ys, (xs+xe)/2, ye, xe, ye);
+		context.moveTo(xe,ye-4);
+		context.lineTo(xe,ye+4);
+		context.stroke();
+
 	}
 
 };
