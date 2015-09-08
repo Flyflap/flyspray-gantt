@@ -4,8 +4,9 @@
 #tasklist_table {display:inline-block;}
 #tasklist_table thead {max-width:50px;width:50px;overflow:hidden;text-overflow:hidden;}
 #tasklist_table td, #tasklist_table th{width:50px;white-space:nowrap;overflow:hidden;max-width:50px;}
-.gt{display:inline-block;width:40px;position:absolute;background-color:#0cf;border-radius:2px;}
+.gt{display:inline-block;width:4px;position:absolute;background-color:#0cf;border-radius:2px;}
 .gt a{color:#000;}
+.gt.super{width:150px;}
 tr.closed a {text-decoration:line-through;}
 #mycanvas{position:absolute;top:0;left:0;z-index:-1;}
 </style>
@@ -36,7 +37,6 @@ tr.closed a {text-decoration:line-through;}
 		else: echo '<th style="max-width:30px;overflow:hidden;">'.Filters::noXSS(L($col)).'</th>';
 		endif;
 endforeach; ?>
-	<th>dep</th>
 	<th style="width:100%"></th>
 </tr>
 </thead>
@@ -67,8 +67,31 @@ $bgi=0;
 $r=0;
 $lastsuper=-1;
 $c=array(); # fuer canvas dependency lines
+$due=array(); # fuer Anzeige Fertigstellungstermine
+
 # We must loop at least one additional time for filtering closed and private status and layouting timeline.
 # So lets collect row output in array first...
+foreach ($tasks as $task_details):
+	if($task_details['t3duedate']){
+		#echo "\nt3 ".$task_details['t3id']." ".$task_details['t3duedate'];
+	}
+	if($task_details['t2duedate']){
+		#echo "\nt2 ".$task_details['t2id']." ".$task_details['t2duedate'];
+	}
+	if($task_details['t1duedate']){
+		#echo "\nt1 ".$task_details['t1id']." ".$task_details['t1duedate'];
+	}
+
+
+	if($task_details['t1id']==3){
+		#print_r($task_details);
+		#die();
+	}
+
+endforeach;
+
+# reset $r
+$r=0;
 foreach ($tasks as $task_details):
 	$r++;
 	if($lastsuper!=$task_details['t1id']){
@@ -104,11 +127,19 @@ foreach ($tasks as $task_details):
 			<td style="border-top:1px solid #bbb;"><?php echo Filters::noXSS($task_details['t1'.$col]); ?></td>
 			<?php endif; ?>
 		<?php endforeach; ?>
-		<td style="border-top:1px solid #bbb;"><div class="gt" id="t<?php echo $task_details['t1id']; ?>"><a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t1id'])); ?>"><?php echo Filters::noXSS($task_details['t1summary']); ?></a></div></td>
+		<td style="border-top:1px solid #bbb;">
+			<div class="gt super" id="t<?php echo $task_details['t1id']; ?>">
+			<a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t1id'])); ?>"><?php echo Filters::noXSS($task_details['t1summary']); ?></a>
+			</div>
+			<?php
+			if ($task_details['t1duedate']):
+				$due[]='{ tsrc:"t'.$task_details['t1id'].'", duetime:"'.$task_details['t1duedate'].'"}';		
+			endif; 
+			?>
+		</td>
 		<td id="desc_<?php echo $task_details['t1id']; ?>" class="descbox"><b><?php echo L('taskdescription'); ?></b>
 		<?php echo $task_details['t1detailed_desc'] ? TextFormatter::render($task_details['t1detailed_desc'], 'task', $task_details['t1id'], $task_details['desccache']) : '<p>'.L('notaskdescription').'</p>'; ?>
 		</td>
-		<td style="width:100%;border-top:1px solid #bbb;"></td>
     		</tr>
 	<?php 
 
@@ -139,7 +170,16 @@ foreach ($tasks as $task_details):
 			<td><?php echo Filters::noXSS($task_details['t2'.$col]); ?></td>
 			<?php endif; ?>
 		<?php endforeach; ?>
-		<td style="border-top:1px solid #bbb;"><div class="gt" id="t<?php echo $task_details['t2id']; ?>">><a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t2id'])); ?>"><?php echo Filters::noXSS($task_details['t2summary']); ?></a></div></td>
+		<td style="border-top:1px solid #bbb;">
+			<div class="gt super" id="t<?php echo $task_details['t2id']; ?>">>
+			<a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t2id'])); ?>"><?php echo Filters::noXSS($task_details['t2summary']); ?></a>
+			<?php
+			if ($task_details['t2duedate']):
+				$due[]='{ tsrc:"t'.$task_details['t2id'].'", duetime:"'.$task_details['t2duedate'].'"}';		
+			endif; 
+			?>
+			</div>
+		</td>
 		<td id="desc_<?php echo $task_details['t2id']; ?>" class="descbox"><b><?php echo L('taskdescription'); ?></b>
 		<?php echo $task_details['t2detailed_desc'] ? TextFormatter::render($task_details['t2detailed_desc'], 'task', $task_details['t2id'], $task_details['desccache']) : '<p>'.L('notaskdescription').'</p>'; ?>
 		</td>
@@ -179,7 +219,16 @@ foreach ($tasks as $task_details):
 		</td>
 		<?php endif; ?>
 	<?php endforeach; ?>
-	<td style="width:100%;<?php if( $l==1): echo 'border-top:1px solid #bbb;'; endif; ?>"><div class="gt" style="left:<?php echo rand(300,800);?>px;" id="t<?php echo $task_details['t'.$l.'id']; ?>"><a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t'.$l.'id'])); ?>"><?php echo Filters::noXSS($task_details['t'.$l.'summary']); ?></a></div></td>
+	<td style="width:100%;<?php if( $l==1): echo 'border-top:1px solid #bbb;'; endif; ?>">
+		<div class="gt" style="<?php echo $task_details['t'.$l.'dep'] ? 'left:800px;' : 'left:'.rand(300,300).'px'; ?>" id="t<?php echo $task_details['t'.$l.'id']; ?>">
+			<a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t'.$l.'id'])); ?>"><?php echo Filters::noXSS($task_details['t'.$l.'summary']); ?></a>
+		</div>
+		<?php
+		if ($task_details['t'.$l.'duedate']):
+			$due[]='{ tsrc:"t'.$task_details['t'.$l.'id'].'", duetime:"'.$task_details['t'.$l.'duedate'].'"}';		
+		endif; 
+		?>
+	</td>
 	<td id="desc_<?php echo $task_details['t'.$l.'id']; ?>" class="descbox"><b><?php echo L('taskdescription'); ?></b>
 	<?php echo $task_details['t'.$l.'detailed_desc'] ? TextFormatter::render($task_details['t'.$l.'detailed_desc'], 'task', $task_details['t'.$l.'id'], $task_details['t'.$l.'desccache']) : '<p>'.L('notaskdescription').'</p>'; ?>
 	</td>
@@ -197,7 +246,7 @@ foreach ($tasks as $task_details):
 var canvas;
 var context;
 c=[ <?php echo implode(',', $c); ?> ];
-
+due=[ <?php echo implode(',', $due); ?> ];
 window.onload=init();</script>
 <div>
 TODO:
@@ -207,7 +256,7 @@ TODO:
 <li>thin red overdue line   "|------today"</li>
 <li>dependency/blockers: automatic timeshifted positioning of tasks</li>
 <li>priority timeshifted positioning - horizontal floating</li>
-<li>severity positioning/upfloating; subtasks just within their supertask group</li>
+<li class="fa fa-check"><s>severity positioning/upfloating; subtasks just within their supertask group</s></li>
 <li>task width dependend on estimated effort and work capacity/resources</li>
 <li>capacity shifted tasks</li>
 <li>assignments to tasks and available work resources for positioning</li>
