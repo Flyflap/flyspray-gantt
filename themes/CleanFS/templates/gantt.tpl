@@ -164,15 +164,15 @@ foreach ($tasks as $task_details):
 			<div class="progress_bar_container"><span><?php echo Filters::noXSS($task_details['t2percent_complete']); ?>%</span><div class="progress_bar" style="width:<?php echo Filters::noXSS($task_details['t2percent_complete']); ?>%"></div></div>
 			</td>
 			<?php elseif($col=='id'): ?>
-			<td style="<?php echo 'background-color:'.$bg[$bgi]; ?>"><?php echo Filters::noXSS($task_details['t2'.$col]); ?></td>
+			<td style="<?php echo 'background-color:'.$bg[$bgi].';padding-left:20px;'; ?>"><?php echo Filters::noXSS($task_details['t2'.$col]); ?></td>
 			<?php elseif ($col=='summary'): ?>
-			<td style="border-top:1px solid #bbb;"><a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t2id'])); ?>"><?php echo Filters::noXSS($task_details['t2'.$col]); ?></a></td>
+			<td><a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t2id'])); ?>"><?php echo Filters::noXSS($task_details['t2'.$col]); ?></a></td>
 			<?php else: ?>
 			<td><?php echo Filters::noXSS($task_details['t2'.$col]); ?></td>
 			<?php endif; ?>
 		<?php endforeach; ?>
 		<td style="border-top:1px solid #bbb;">
-			<div class="gt super" id="t<?php echo $task_details['t2id']; ?>">>
+			<div class="gt super" id="t<?php echo $task_details['t2id']; ?>">
 			<a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t2id'])); ?>"><?php echo Filters::noXSS($task_details['t2summary']); ?></a>
 			<?php
 			if ($task_details['t2duedate']):
