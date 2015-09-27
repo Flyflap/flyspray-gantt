@@ -220,8 +220,8 @@ foreach ($tasks as $task_details):
 		</td>
 		<?php endif; ?>
 	<?php endforeach; ?>
-	<td style="width:100%;<?php if( $l==1): echo 'border-top:1px solid #bbb;'; endif; ?>">
-		<div class="gt" style="<?php echo $task_details['t'.$l.'dep'] ? 'left:800px;' : 'left:'.rand(300,300).'px'; ?>" id="t<?php echo $task_details['t'.$l.'id']; ?>">
+	<td style="position:relative;width:100%;<?php if( $l==1): echo 'border-top:1px solid #bbb;'; endif; ?>">
+		<div class="gt" style="<?php echo $task_details['t'.$l.'dep'] ? 'left:500px;' : 'left:'.rand(0,100).'px'; ?>" id="t<?php echo $task_details['t'.$l.'id']; ?>">
 			<a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t'.$l.'id'])); ?>"><?php echo Filters::noXSS($task_details['t'.$l.'summary']); ?></a>
 		</div>
 		<?php
