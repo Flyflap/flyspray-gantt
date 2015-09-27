@@ -44,6 +44,7 @@ $result=$db->Query('SELECT
 	COUNT(t1v.task_id) AS t1votes,
 	COUNT(t1c.task_id) AS t1comments,
 	COUNT(t1e.task_id) AS t1effort,
+	COUNT(t1a.task_id) AS t1attachments,
 
 	t2.task_id AS t2id,t2.project_id AS t2project_id,t2.task_type AS t2tasktype, t2.is_closed AS t2closed,
 	t2.item_summary AS t2summary, t2.item_status AS t2status, t2.product_category AS t2category,
@@ -54,6 +55,7 @@ $result=$db->Query('SELECT
 	COUNT(t2v.task_id) AS t2votes,
 	COUNT(t2c.task_id) AS t2comments,
 	COUNT(t2e.task_id) AS t2effort,
+	COUNT(t2a.task_id) AS t2attachments,
 	
 	t3.task_id AS t3id,t3.project_id AS t3project_id,t3.task_type AS t3tasktype, t3.is_closed AS t3closed,
 	t3.item_summary AS t3summary, t3.item_status AS t3status, t3.product_category AS t3category,
@@ -64,6 +66,7 @@ $result=$db->Query('SELECT
 	COUNT(t3v.task_id) AS t3votes,
 	COUNT(t3c.task_id) AS t3comments,
 	COUNT(t3e.task_id) AS t3effort,
+	COUNT(t3a.task_id) AS t3attachments,
 
 	'.$GCONCATS.'t1d.dep_task_id'.$GCONCATE.' AS t1dep,
 	'.$GCONCATS.'t2d.dep_task_id'.$GCONCATE.' AS t2dep,
@@ -84,6 +87,9 @@ $result=$db->Query('SELECT
 	LEFT JOIN {dependencies} t1d ON t1d.task_id=t1.task_id
 	LEFT JOIN {dependencies} t2d ON t2d.task_id=t2.task_id
 	LEFT JOIN {dependencies} t3d ON t3d.task_id=t3.task_id
+	LEFT JOIN {attachments} t1a ON t1a.task_id=t1.task_id
+	LEFT JOIN {attachments} t2a ON t2a.task_id=t2.task_id
+	LEFT JOIN {attachments} t3a ON t3a.task_id=t3.task_id
 	WHERE t1.supertask_id=0 OR t1.supertask_id IS NULL
 	GROUP BY t1.task_id, t2.task_id, t3.task_id
 	ORDER BY
