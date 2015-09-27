@@ -34,6 +34,7 @@ tr.closed a {text-decoration:line-through;}
 		elseif($col=='parent'): echo '<th style="width:50px;"><i class="fa fa-level-up fa-flip-horizontal"></i></th>';
 		elseif($col=='effort'): echo '<th style="width:50px;"><i class="fa fa-clock-o"></i></th>';
 		elseif($col=='estimatedeffort'): echo '<th style="width:50px;"><i class="fa fa-clock-o"></i></th>';
+		elseif($col=='attachments'): echo '<th style="width:50px;"><i class="fa fa-paperclip"></i></th>';
 		else: echo '<th style="max-width:30px;overflow:hidden;">'.Filters::noXSS(L($col)).'</th>';
 		endif;
 endforeach; ?>
