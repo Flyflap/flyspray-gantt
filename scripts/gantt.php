@@ -70,11 +70,18 @@ $result=$db->Query('SELECT
 
 	'.$GCONCATS.'t1d.dep_task_id'.$GCONCATE.' AS t1dep,
 	'.$GCONCATS.'t2d.dep_task_id'.$GCONCATE.' AS t2dep,
-	'.$GCONCATS.'t3d.dep_task_id'.$GCONCATE.' AS t3dep
+	'.$GCONCATS.'t3d.dep_task_id'.$GCONCATE.' AS t3dep,
+	
+	'.$GCONCATS.'DISTINCT t1ass.user_id'.$GCONCATE.' AS t1assignedto,
+	'.$GCONCATS.'DISTINCT t2ass.user_id'.$GCONCATE.' AS t2assignedto,
+	'.$GCONCATS.'DISTINCT t3ass.user_id'.$GCONCATE.' AS t3assignedto
 	
 	FROM {tasks} t1
 	LEFT JOIN {tasks} t2 ON t1.task_id=t2.supertask_id
 	LEFT JOIN {tasks} t3 ON t2.task_id=t3.supertask_id
+	LEFT JOIN {assigned} t1ass ON t1ass.task_id=t1.task_id
+	LEFT JOIN {assigned} t2ass ON t2ass.task_id=t2.task_id
+	LEFT JOIN {assigned} t3ass ON t3ass.task_id=t3.task_id
 	LEFT JOIN {votes} t1v ON t1v.task_id=t1.task_id
 	LEFT JOIN {votes} t2v ON t2v.task_id=t2.task_id
 	LEFT JOIN {votes} t3v ON t3v.task_id=t3.task_id
