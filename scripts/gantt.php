@@ -27,7 +27,7 @@ if (in_array('effort', $visible) && !$user->perms('view_current_effort_done')) {
 if( "mysql"==substr($db->dbtype, 0, 5) ){
 	$GCONCATS='GROUP_CONCAT(';
 	$GCONCATE=')';
-} elseif( 'postgres'==aubstr($db->dbtype,0,8)){
+} elseif( 'postgres'==substr($db->dbtype,0,8)){
 	$GCONCATS='array_to_string(array_agg(';
 	$GCONCATE='))';
 } else{
@@ -35,33 +35,44 @@ if( "mysql"==substr($db->dbtype, 0, 5) ){
 }
 # Limited to 3 Levels, extend and in tree.tpl for more if you really have deeper nested tasks.
 $result=$db->Query('SELECT
-	t1.task_id AS t1id,t1.project_id AS t1project_id,t1.task_type AS t1tasktype, t1.is_closed AS t1closed,
+	t1.task_id AS t1id,t1.project_id AS t1project,t1.task_type AS t1tasktype, t1.is_closed AS t1closed,
 	t1.item_summary AS t1summary, t1.item_status AS t1status, t1.product_category AS t1category,
 	t1.task_priority AS t1priority, t1.task_severity AS t1severity, t1.percent_complete AS t1percent_complete, t1.supertask_id AS t1parent,
-	t1.date_opened AS t1dateopened, t1.due_date AS t1duedate, t1.last_edited_time AS t1lastedit, t1.date_closed AS t1dateclosed,
+	t1.date_opened AS t1dateopened, t1.opened_by AS t1openedby, t1.due_date AS t1duedate,
+	t1.last_edited_time AS t1lastedit, t1.last_edited_by AS t1editedby,
+	t1.date_closed AS t1dateclosed, t1.closed_by AS t1closedby, t1.product_version AS t1reportedin, t1.closedby_version AS t1dueversion,
 	t1.mark_private AS t1private, t1.list_order AS t1order, t1.estimated_effort AS t1estimatedeffort,
+	t1.operating_system AS t1os,
 	t1.detailed_desc AS t1detailed_desc,
 	COUNT(t1v.task_id) AS t1votes,
 	COUNT(t1c.task_id) AS t1comments,
 	COUNT(t1e.task_id) AS t1effort,
 	COUNT(t1a.task_id) AS t1attachments,
 
-	t2.task_id AS t2id,t2.project_id AS t2project_id,t2.task_type AS t2tasktype, t2.is_closed AS t2closed,
+	t2.task_id AS t2id,t2.project_id AS t2project,t2.task_type AS t2tasktype, t2.is_closed AS t2closed,
 	t2.item_summary AS t2summary, t2.item_status AS t2status, t2.product_category AS t2category,
 	t2.task_priority AS t2priority, t2.task_severity AS t2severity, t2.percent_complete AS t2percent_complete, t2.supertask_id AS t2parent,
-	t2.date_opened AS t2dateopened, t2.due_date AS t2duedate, t2.last_edited_time AS t2lastedit, t2.date_closed AS t2dateclosed,
+	t2.date_opened AS t2dateopened, t2.opened_by AS t2openedby, t2.due_date AS t2duedate,
+	t2.last_edited_time AS t2lastedit, t2.last_edited_by AS t2editedby,
+	t2.date_closed AS t2dateclosed,	t2.closed_by AS t2closedby,
+	t2.product_version AS t2reportedin, t2.closedby_version AS t2dueversion,
 	t2.mark_private AS t2private, t2.list_order AS t2order, t2.estimated_effort AS t2estimatedeffort,
+	t2.operating_system AS t2os,
 	t2.detailed_desc AS t2detailed_desc,
 	COUNT(t2v.task_id) AS t2votes,
 	COUNT(t2c.task_id) AS t2comments,
 	COUNT(t2e.task_id) AS t2effort,
 	COUNT(t2a.task_id) AS t2attachments,
 	
-	t3.task_id AS t3id,t3.project_id AS t3project_id,t3.task_type AS t3tasktype, t3.is_closed AS t3closed,
+	t3.task_id AS t3id,t3.project_id AS t3project,t3.task_type AS t3tasktype, t3.is_closed AS t3closed,
 	t3.item_summary AS t3summary, t3.item_status AS t3status, t3.product_category AS t3category,
 	t3.task_priority AS t3priority, t3.task_severity AS t3severity, t3.percent_complete AS t3percent_complete, t3.supertask_id AS t3parent,
-	t3.date_opened AS t3dateopened, t3.due_date AS t3duedate, t3.last_edited_time AS t3lastedit, t3.date_closed AS t3dateclosed,
+	t3.date_opened AS t3dateopened, t3.opened_by AS t3openedby, t3.due_date AS t3duedate,
+	t3.last_edited_time AS t3lastedit, t3.last_edited_by AS t3editedby,
+	t3.date_closed AS t3dateclosed, t3.closed_by AS t3closedby,
+	t3.product_version AS t3reportedin, t3.closedby_version AS t3dueversion,
 	t3.mark_private AS t3private, t3.list_order AS t3order, t3.estimated_effort AS t3estimatedeffort,
+	t3.operating_system AS t3os,
 	t3.detailed_desc AS t3detailed_desc,
 	COUNT(t3v.task_id) AS t3votes,
 	COUNT(t3c.task_id) AS t3comments,
@@ -71,7 +82,7 @@ $result=$db->Query('SELECT
 	'.$GCONCATS.'t1d.dep_task_id'.$GCONCATE.' AS t1dep,
 	'.$GCONCATS.'t2d.dep_task_id'.$GCONCATE.' AS t2dep,
 	'.$GCONCATS.'t3d.dep_task_id'.$GCONCATE.' AS t3dep,
-	
+
 	'.$GCONCATS.'DISTINCT t1ass.user_id'.$GCONCATE.' AS t1assignedto,
 	'.$GCONCATS.'DISTINCT t2ass.user_id'.$GCONCATE.' AS t2assignedto,
 	'.$GCONCATS.'DISTINCT t3ass.user_id'.$GCONCATE.' AS t3assignedto
@@ -106,10 +117,12 @@ $result=$db->Query('SELECT
 	'
 );
 
+$tasks=array();
 while ($t = $db->FetchRow($result)) {
 	$tasks[]=$t;
 }
-#echo '<pre>';print_r($tasks[2]);die();
+
+#echo '<pre>';print_r($tasks);die();
 $total=count($tasks);
 $page->uses('tasks','total','visible');
 $page->pushTpl('gantt.tpl');
