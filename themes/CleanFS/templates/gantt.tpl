@@ -4,9 +4,10 @@
 #tasklist_table {display:inline-block;}
 #tasklist_table thead {max-width:50px;width:50px;overflow:hidden;text-overflow:hidden;}
 #tasklist_table td, #tasklist_table th{width:50px;white-space:nowrap;overflow:hidden;max-width:50px;}
-.gt{display:inline-block;width:4px;position:absolute;background-color:#0cf;border-radius:2px;}
+.gt{display:inline-block;width:4px;position:absolute;top:0;background-color:#0cf;border-radius:2px;}
 .gt a{color:#000;}
 .gt.super{width:150px;}
+tr.closed {opacity:0.4;}
 tr.closed a {text-decoration:line-through;}
 #mycanvas{position:absolute;top:0;left:0;z-index:-1;}
 </style>
@@ -24,17 +25,18 @@ tr.closed a {text-decoration:line-through;}
 <tr>
 <?php foreach ($visible as $col):
 		if($col=='progress'): echo '<th style="width:50px;">'.Filters::noXSS(L($col)).'</th>';
-		elseif($col=='comments'): echo '<th style="width:50px;"><i class="fa fa-comments"></i></th>';
-		elseif($col=='dateopened'): echo '<th style="width:50px;"><i class="fa fa-calendar-o"></i></th>';
-		elseif($col=='lastedit'): echo '<th style="width:50px;"><i class="fa fa-calendar-o"></i></th>';
-		elseif($col=='duedate'): echo '<th style="width:50px;"><i class="fa fa-calendar-o"></i></th>';
-		elseif($col=='dateclosed'): echo '<th style="width:50px;"><i class="fa fa-calendar-o"></i></th>';
-		elseif($col=='private'): echo '<th style="width:50px;"><i class="fa fa-lock"></i></th>';
-		elseif($col=='votes'): echo '<th style="width:50px;"><i class="fa fa-star"></i></th>';
-		elseif($col=='parent'): echo '<th style="width:50px;"><i class="fa fa-level-up fa-flip-horizontal"></i></th>';
-		elseif($col=='effort'): echo '<th style="width:50px;"><i class="fa fa-clock-o"></i></th>';
-		elseif($col=='estimatedeffort'): echo '<th style="width:50px;"><i class="fa fa-clock-o"></i></th>';
-		elseif($col=='attachments'): echo '<th style="width:50px;"><i class="fa fa-paperclip"></i></th>';
+		elseif($col=='comments'): echo '<th style="width:50px;" title="'.eL('comments').'"><i class="fa fa-comments"></i></th>';
+		elseif($col=='dateopened'): echo '<th style="width:50px;" title="'.eL('opened').'"><i class="fa fa-calendar-o"></i></th>';
+		elseif($col=='lastedit'): echo '<th style="width:50px;" title="'.eL('lastedit').'"><i class="fa fa-calendar-o"></i></th>';
+		elseif($col=='duedate'): echo '<th style="width:50px;" title="'.eL('duedate').'"><i class="fa fa-calendar-o"></i></th>';
+		elseif($col=='dateclosed'): echo '<th style="width:50px;" title="'.eL('dateclosed').'"><i class="fa fa-calendar-o"></i></th>';
+		elseif($col=='private'): echo '<th style="width:50px;" title="'.eL('private').'"><i class="fa fa-lock"></i></th>';
+		elseif($col=='votes'): echo '<th style="width:50px;" title="'.eL('votes').'"><i class="fa fa-star"></i></th>';
+		elseif($col=='parent'): echo '<th style="width:50px;" title="'.eL('parent').'"><i class="fa fa-level-up fa-flip-horizontal"></i></th>';
+		elseif($col=='effort'): echo '<th style="width:50px;" title="'.eL('effort').'"><i class="fa fa-clock-o"></i></th>';
+		elseif($col=='status'): echo '<th style="width:50px;" title="'.eL('status').'"><i class="fa fa-circle"></i></th>';
+		elseif($col=='estimatedeffort'): echo '<th style="width:50px;" title="'.eL('estimatedeffort').'"><i class="fa fa-clock-o"></i></th>';
+		elseif($col=='attachments'): echo '<th style="width:50px;" title="'.eL('attachmentss').'"><i class="fa fa-paperclip"></i></th>';
 		else: echo '<th style="max-width:30px;overflow:hidden;">'.Filters::noXSS(L($col)).'</th>';
 		endif;
 endforeach; ?>
@@ -105,7 +107,7 @@ foreach ($tasks as $task_details):
 	else { $l=1; }
 
 	if ($fl==1 && ($l==2 || $l==3)): ?>
-		<tr id="task<?php echo $task_details['t1id']; ?>" class="severity<?php echo Filters::noXSS($task_details['t1severity']); echo $task_details['t'.$l.'closed']==1 ? ' closed':''; ?>">
+		<tr id="task<?php echo $task_details['t1id']; ?>" class="sev<?php echo Filters::noXSS($task_details['t1severity']); echo $task_details['t'.$l.'closed']==1 ? ' closed':''; ?>">
 		<?php
 		if( $task_details['t'.$l.'dep']!=''){
 			$deps=explode(',', $task_details['t1dep']);
@@ -122,13 +124,15 @@ foreach ($tasks as $task_details):
 			</td>
 			<?php elseif ($col=='id'): ?>
 			<td style="<?php echo 'background-color:'.$bg[$bgi]; ?>"><?php echo $task_details['t1'.$col]; ?></td>
+			<?php elseif ($col=='votes' || $col=='comments' || $col=='attachments' || $col=='parent' || $col=='private' || $col=='duedate' || $col=='dueversion' || $col=='dateclosed' || $col=='closedby' || $col=='editedby' || $col=='estimatedeffort' || $col=='effort'): ?>
+			<td class="<?php echo $col; ?>" style="border-top:1px solid #bbb;"><?php echo ($task_details['t1'.$col] >0) ? $task_details['t1'.$col]:''; ?></td>
 			<?php elseif ($col=='summary'): ?>
 			<td style="border-top:1px solid #bbb;"><a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t1id'])); ?>"><?php echo Filters::noXSS($task_details['t1'.$col]); ?></a></td>
 			<?php else: ?>
-			<td style="border-top:1px solid #bbb;"><?php echo Filters::noXSS($task_details['t1'.$col]); ?></td>
+			<td class="<?php echo $col; ?>" style="border-top:1px solid #bbb;"><?php echo Filters::noXSS($task_details['t1'.$col]); ?></td>
 			<?php endif; ?>
 		<?php endforeach; ?>
-		<td style="border-top:1px solid #bbb;">
+		<td style="position:relative;border-top:1px solid #bbb;">
 			<div class="gt super" id="t<?php echo $task_details['t1id']; ?>">
 			<a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t1id'])); ?>"><?php echo Filters::noXSS($task_details['t1summary']); ?></a>
 			</div>
@@ -148,7 +152,7 @@ foreach ($tasks as $task_details):
 		endif;
 
 	if ($sl==1 && $l==3): ?>
-	<tr id="task<?php echo $task_details['t2id']; ?>" class="severity<?php echo Filters::noXSS($task_details['t2severity']); echo $task_details['t'.$l.'closed']==1 ? ' closed':''; ?>">
+	<tr id="task<?php echo $task_details['t2id']; ?>" class="sev<?php echo Filters::noXSS($task_details['t2severity']); echo $task_details['t'.$l.'closed']==1 ? ' closed':''; ?>">
 		<?php
 		if( $task_details['t'.$l.'dep']!=''){
 			$deps=explode(',', $task_details['t2dep']);
@@ -165,13 +169,15 @@ foreach ($tasks as $task_details):
 			</td>
 			<?php elseif($col=='id'): ?>
 			<td style="<?php echo 'background-color:'.$bg[$bgi].';padding-left:20px;'; ?>"><?php echo Filters::noXSS($task_details['t2'.$col]); ?></td>
+			<?php elseif ($col=='votes' || $col=='comments' || $col=='attachments' || $col=='parent' || $col=='private' || $col=='duedate' || $col=='dueversion' || $col=='dateclosed' || $col=='closedby' || $col=='editedby' || $col=='estimatedeffort' || $col=='effort'): ?>
+			<td class="<?php echo $col; ?>" style="border-top:1px solid #bbb;"><?php echo ($task_details['t2'.$col] >0) ? $task_details['t2'.$col]:''; ?></td>
 			<?php elseif ($col=='summary'): ?>
 			<td><a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t2id'])); ?>"><?php echo Filters::noXSS($task_details['t2'.$col]); ?></a></td>
 			<?php else: ?>
 			<td><?php echo Filters::noXSS($task_details['t2'.$col]); ?></td>
 			<?php endif; ?>
 		<?php endforeach; ?>
-		<td style="border-top:1px solid #bbb;">
+		<td style="position:relative;border-top:1px solid #bbb;">
 			<div class="gt super" id="t<?php echo $task_details['t2id']; ?>">
 			<a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t2id'])); ?>"><?php echo Filters::noXSS($task_details['t2summary']); ?></a>
 			<?php
@@ -187,17 +193,17 @@ foreach ($tasks as $task_details):
     		</tr>
 	<?php 
 		$sl=0;
-		endif;
+	endif;
 	?>
 
-	<tr id="task<?php echo $task_details['t'.$l.'id']; ?>" class="severity<?php echo Filters::noXSS($task_details['t'.$l.'severity']); echo $task_details['t'.$l.'closed']==1 ? ' closed':''; ?>">
-		<?php
-		if( $task_details['t'.$l.'dep']!=''){
-			$deps=explode(',', $task_details['t'.$l.'dep']);
-			foreach($deps as $dep){
-				$c[]='{step: "1", tsrc:"t'.$dep.'", fsrc:"", ttgt:"t'.$task_details['t'.$l.'id'].'", ftgt:""}';
-			}
+	<tr id="task<?php echo $task_details['t'.$l.'id']; ?>" class="sev<?php echo Filters::noXSS($task_details['t'.$l.'severity']); echo $task_details['t'.$l.'closed']==1 ? ' closed':''; ?>">
+	<?php
+	if( $task_details['t'.$l.'dep']!=''){
+		$deps=explode(',', $task_details['t'.$l.'dep']);
+		foreach($deps as $dep){
+			$c[]='{step: "1", tsrc:"t'.$dep.'", fsrc:"", ttgt:"t'.$task_details['t'.$l.'id'].'", ftgt:""}';
 		}
+	}
 
 		foreach ($visible as $col):
 		if($col == 'progress'):?>
@@ -213,20 +219,26 @@ foreach ($tasks as $task_details):
 			if( $col=='id' && $l==1){ echo 'background-color:'.$bg[$bgi].';'; }
 			if( $l==1){ echo '"';}
 		?>>
-			<?php if ($col=='summary'): ?><a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t'.$l.'id'])); ?>"><?php echo Filters::noXSS($task_details['t'.$l.$col]); ?></a>
+			<?php if ($col=='votes' || $col=='comments' || $col=='attachments' || $col=='parent' || $col=='private' || $col=='duedate' || $col=='dueversion' || $col=='dateclosed' || $col=='closedby' || $col=='editedby' || $col=='estimatedeffort' || $col=='effort'): ?>
+			<?php echo ($task_details['t'.$l.$col] >0) ? $task_details['t'.$l.$col]:''; ?>
+
+			<?php elseif ($col=='summary'): ?><a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t'.$l.'id'])); ?>"><?php echo Filters::noXSS($task_details['t'.$l.$col]); ?></a>
 			<?php else:?>
 			<?php echo ($col=='id' && $l==2)? '&#9492; ':''; ?><?php echo Filters::noXSS($task_details['t'.$l.$col]); ?>
+<?php 
+#print_r($task_details);die(); 
+?>
 			<?php endif; ?>
 		</td>
 		<?php endif; ?>
-	<?php endforeach; ?>
+		<?php endforeach; ?>
 	<td style="position:relative;width:100%;<?php if( $l==1): echo 'border-top:1px solid #bbb;'; endif; ?>">
 		<div class="gt" style="<?php echo $task_details['t'.$l.'dep'] ? 'left:500px;' : 'left:'.rand(0,100).'px'; ?>" id="t<?php echo $task_details['t'.$l.'id']; ?>">
 			<a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t'.$l.'id'])); ?>"><?php echo Filters::noXSS($task_details['t'.$l.'summary']); ?></a>
 		</div>
 		<?php
 		if ($task_details['t'.$l.'duedate']):
-			$due[]='{ tsrc:"t'.$task_details['t'.$l.'id'].'", duetime:"'.$task_details['t'.$l.'duedate'].'"}';		
+			$due[]='{ tsrc:"t'.$task_details['t'.$l.'id'].'", duetime:"'.$task_details['t'.$l.'duedate'].'"}';
 		endif; 
 		?>
 	</td>
