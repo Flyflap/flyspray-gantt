@@ -96,11 +96,8 @@ function reconnect(){
 			xs=document.getElementById(c[i].tsrc).offsetLeft + document.getElementById(c[i].tsrc).offsetWidth;
 			ys=document.getElementById(c[i].tsrc+'.'+c[i].fsrc).offsetTop - document.getElementById(c[i].tsrc).parentNode.parentNode.scrollTop +hs;
 		}else{
-			//xs=document.getElementById(c[i].tsrc).offsetLeft + document.getElementById(c[i].tsrc).offsetWidth;
-			// if css <td style="position:relative"...
-			xs=document.getElementById(c[i].tsrc).offsetLeft + document.getElementById(c[i].tsrc).parentNode.offsetLeft + document.getElementById(c[i].tsrc).offsetWidth;
-			//ys=document.getElementById(c[i].tsrc).offsetTop - document.getElementById(c[i].tsrc).parentNode.scrollTop+hs;
-			ys=document.getElementById(c[i].tsrc).parentNode.offsetTop + document.getElementById(c[i].tsrc).offsetTop +hs;
+			xs=document.getElementById(c[i].tsrc).offsetLeft + document.getElementById(c[i].tsrc).offsetWidth;
+			ys=document.getElementById(c[i].tsrc).offsetTop - document.getElementById(c[i].tsrc).parentNode.scrollTop+hs;
 		}
 
 		if(document.getElementById(c[i].ttgt).checked){
@@ -111,15 +108,11 @@ function reconnect(){
 				ye=document.getElementById('jtl.'+c[i].ttgt+'.'+c[i].ftgt).offsetTop - document.getElementById(c[i].ttgt).parentNode.parentNode.scrollTop +he;
 			}
 		}else{
-			//xe=document.getElementById(c[i].ttgt).offsetLeft;
-			// if ccs <td style="position:relative"...
-			xe=document.getElementById(c[i].tsrc).parentNode.offsetLeft + document.getElementById(c[i].ttgt).offsetLeft;
+			xe=document.getElementById(c[i].ttgt).offsetLeft;
 			if(document.getElementById(c[i].ttgt).parentNode.parentNode.classList[0]=='group'){
 				ye=document.getElementById(c[i].ttgt).parentNode.offsetTop - document.getElementById(c[i].ttgt).parentNode.parentNode.parentNode.scrollTop +he;
-				ye=document.getElementById(c[i].ttgt).parentNode.offsetTop - document.getElementById(c[i].ttgt).parentNode.parentNode.parentNode.scrollTop +he;
 			}else{
-				//ye=document.getElementById(c[i].ttgt).offsetTop - document.getElementById(c[i].ttgt).parentNode.scrollTop +he;
-				ye=document.getElementById(c[i].ttgt).parentNode.offsetTop + document.getElementById(c[i].ttgt).offsetTop +he;
+				ye=document.getElementById(c[i].ttgt).offsetTop - document.getElementById(c[i].ttgt).parentNode.scrollTop +he;
 			}
 		}
 		context.moveTo(xs, ys);
@@ -130,12 +123,9 @@ function reconnect(){
 	for (i = 0, len = due.length; i < len; ++i) {
 		context.beginPath();
 		context.strokeStyle = "rgba(255,127,0,1)";
-		//xs=document.getElementById(due[i].tsrc).offsetLeft + document.getElementById(due[i].tsrc).offsetWidth;
-		xs=document.getElementById(due[i].tsrc).parentNode.offsetLeft + document.getElementById(due[i].tsrc).offsetWidth;
-		//ys=document.getElementById(due[i].tsrc).offsetTop - document.getElementById(due[i].tsrc).parentNode.scrollTop+2;
-		ys=document.getElementById(due[i].tsrc).parentNode.offsetTop - document.getElementById(due[i].tsrc).parentNode.scrollTop +4;
-		//xe=document.getElementById(due[i].tsrc).offsetLeft + document.getElementById(due[i].tsrc).offsetWidth+200;
-		xe=document.getElementById(due[i].tsrc).parentNode.offsetLeft + document.getElementById(due[i].tsrc).offsetWidth+200;
+		xs=document.getElementById(due[i].tsrc).offsetLeft + document.getElementById(due[i].tsrc).offsetWidth;
+		ys=document.getElementById(due[i].tsrc).offsetTop - document.getElementById(due[i].tsrc).parentNode.scrollTop+2;
+		xe=document.getElementById(due[i].tsrc).offsetLeft + document.getElementById(due[i].tsrc).offsetWidth+200;
 		ye=ys;
 		context.moveTo(xs, ys);
 		context.bezierCurveTo((xs+xe)/2, ys, (xs+xe)/2, ye, xe, ye);
@@ -153,6 +143,7 @@ function cinit(){
 	context = canvas.getContext('2d');
 
 	window.addEventListener('resize', reconnect, false);
+	window.addEventListener('click', reconnect, false);
 	reconnect();
 }
 function fstyle(){
