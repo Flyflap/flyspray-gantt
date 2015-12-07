@@ -61,7 +61,7 @@ col.estimatedeffort {
 #hide:checked ~ table col.tasktype,   #tasktype:checked ~ table col.tasktype,
 #hide:checked ~ table col.progress,   #progress:checked ~ table col.progress,
 #hide:checked ~ table col.status,     #status:checked ~ table col.status,
-#hide:checked ~ table col.dateclosed, #closed:checked ~ table col.dateclosed,
+#hide:checked ~ table col.dateclosed, #dateclosed:checked ~ table col.dateclosed,
 #hide:checked ~ table col.private,    #private:checked ~ table col.private,
 #hide:checked ~ table col.openedby,   #openedby:checked ~ table col.openedby,
 #hide:checked ~ table col.editedby,   #editedby:checked ~ table col.editedby,
