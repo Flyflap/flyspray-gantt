@@ -92,6 +92,10 @@ $result=$db->Query('SELECT
 	'.$GCONCATS.'t2d.dep_task_id'.$GCONCATE.' AS t2dep,
 	'.$GCONCATS.'t3d.dep_task_id'.$GCONCATE.' AS t3dep,
 
+	'.$GCONCATS.'t1r.related_task'.$GCONCATE.' AS t1rel,
+	'.$GCONCATS.'t2r.related_task'.$GCONCATE.' AS t2rel,
+	'.$GCONCATS.'t3r.related_task'.$GCONCATE.' AS t3rel,
+
 	'.$GCONCATS.'DISTINCT t1ass.user_id'.$GCONCATE.' AS t1assignedto,
 	'.$GCONCATS.'DISTINCT t2ass.user_id'.$GCONCATE.' AS t2assignedto,
 	'.$GCONCATS.'DISTINCT t3ass.user_id'.$GCONCATE.' AS t3assignedto
@@ -114,6 +118,9 @@ $result=$db->Query('SELECT
 	LEFT JOIN {dependencies} t1d ON t1d.task_id=t1.task_id
 	LEFT JOIN {dependencies} t2d ON t2d.task_id=t2.task_id
 	LEFT JOIN {dependencies} t3d ON t3d.task_id=t3.task_id
+	LEFT JOIN {related} t1r ON t1r.this_task=t1.task_id
+	LEFT JOIN {related} t2r ON t2r.this_task=t2.task_id
+	LEFT JOIN {related} t3r ON t3r.this_task=t3.task_id
 	LEFT JOIN {attachments} t1a ON t1a.task_id=t1.task_id
 	LEFT JOIN {attachments} t2a ON t2a.task_id=t2.task_id
 	LEFT JOIN {attachments} t3a ON t3a.task_id=t3.task_id
