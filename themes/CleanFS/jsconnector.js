@@ -1,4 +1,6 @@
-var pj,o,c,due;
+var pj,o,c,due,today;
+
+var dsize='40'; // day width in pixel
 
 function init(){
 
@@ -80,6 +82,19 @@ function reconnect(){
 	context = canvas.getContext('2d');
 	context.lineWidth=1;
 	//context.beginPath();
+
+	// draw grid or at least some vertical timestamps. (constant timeframes or dynamic time stretches)
+	// today and 
+	context.beginPath();
+	context.strokeStyle = "rgba(200,0,0,1)";
+	xs=document.getElementById(c[0].tsrc).parentNode.offsetLeft;
+	xe=xs;
+	ys=10;
+	ye=1000;
+	context.moveTo(xs, ys);
+	context.bezierCurveTo((xs+xe)/2, ys, (xs+xe)/2, ye, xe, ye);
+        context.stroke();
+
 	lw=document.getElementById('lines').clientWidth;
 	hs=16;
 	he=2;
@@ -130,17 +145,28 @@ function reconnect(){
 	for (i = 0, len = due.length; i < len; ++i) {
 		context.beginPath();
 		context.strokeStyle = "rgba(255,127,0,1)";
-		//xs=document.getElementById(due[i].tsrc).offsetLeft + document.getElementById(due[i].tsrc).offsetWidth;
-		xs=document.getElementById(due[i].tsrc).parentNode.offsetLeft + document.getElementById(due[i].tsrc).offsetWidth;
-		//ys=document.getElementById(due[i].tsrc).offsetTop - document.getElementById(due[i].tsrc).parentNode.scrollTop+2;
-		ys=document.getElementById(due[i].tsrc).parentNode.offsetTop - document.getElementById(due[i].tsrc).parentNode.scrollTop +4;
-		//xe=document.getElementById(due[i].tsrc).offsetLeft + document.getElementById(due[i].tsrc).offsetWidth+200;
-		xe=document.getElementById(due[i].tsrc).parentNode.offsetLeft + document.getElementById(due[i].tsrc).offsetWidth+200;
-		ye=ys;
-		context.moveTo(xs, ys);
-		context.bezierCurveTo((xs+xe)/2, ys, (xs+xe)/2, ye, xe, ye);
-		context.moveTo(xe,ye-4);
-		context.lineTo(xe,ye+4);
+		context.lineWidth = 2;
+		if(today>due[i].duetime){
+			context.lineWidth = 16;
+			context.strokeStyle = "rgba(255,0,0,1)";
+			xs=document.getElementById(due[i].tsrc).parentNode.offsetLeft-10;
+			xe=document.getElementById(due[i].tsrc).parentNode.offsetLeft;
+			ys=document.getElementById(due[i].tsrc).parentNode.offsetTop - document.getElementById(due[i].tsrc).parentNode.scrollTop +8;
+			ye=ys;
+			context.moveTo(xs, ys);
+			context.bezierCurveTo((xs+xe)/2, ys, (xs+xe)/2, ye, xe, ye);
+		} else{
+			//xs=document.getElementById(due[i].tsrc).parentNode.offsetLeft + document.getElementById(due[i].tsrc).offsetWidth;
+			xs=document.getElementById(due[i].tsrc).parentNode.offsetLeft;
+			//xe=document.getElementById(due[i].tsrc).parentNode.offsetLeft + document.getElementById(due[i].tsrc).offsetWidth+200;
+			xe=document.getElementById(due[i].tsrc).parentNode.offsetLeft + ((due[i].duetime-today)/3600/24)*dsize;
+			ys=document.getElementById(due[i].tsrc).parentNode.offsetTop - document.getElementById(due[i].tsrc).parentNode.scrollTop +4;
+			ye=ys;
+			context.moveTo(xs, ys);
+			context.bezierCurveTo((xs+xe)/2, ys, (xs+xe)/2, ye, xe, ye);
+			context.moveTo(xe,ye-4);
+			context.lineTo(xe,ye+4);
+		}
 		context.stroke();
 
 	}
