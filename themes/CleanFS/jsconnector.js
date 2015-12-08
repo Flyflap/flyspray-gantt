@@ -1,4 +1,4 @@
-var pj,o,c,due,today;
+var pj,o,c,r,due,today;
 
 var dsize='40'; // day width in pixel
 
@@ -100,17 +100,19 @@ function reconnect(){
 	he=2;
 	hm=8; // vert middle
 	h=5;
+
+	/* paint dependencies */
 	for (i = 0, len = c.length; i < len; ++i) {
 		context.beginPath();
 		if(c[i].trans=='inv'){
 			context.strokeStyle = "rgba(200,0,0,1)";
-		}else{
+		} else{
 			context.strokeStyle = "rgba(0,127,0,1)";
 		}
 		if(document.getElementById(c[i].tsrc).checked){
 			xs=document.getElementById(c[i].tsrc).offsetLeft + document.getElementById(c[i].tsrc).offsetWidth;
 			ys=document.getElementById(c[i].tsrc+'.'+c[i].fsrc).offsetTop - document.getElementById(c[i].tsrc).parentNode.parentNode.scrollTop +hs;
-		}else{
+		} else{
 			//xs=document.getElementById(c[i].tsrc).offsetLeft + document.getElementById(c[i].tsrc).offsetWidth;
 			// if css <td style="position:relative"...
 			xs=document.getElementById(c[i].tsrc).offsetLeft + document.getElementById(c[i].tsrc).parentNode.offsetLeft + document.getElementById(c[i].tsrc).offsetWidth;
@@ -125,7 +127,7 @@ function reconnect(){
 			}else{
 				ye=document.getElementById('jtl.'+c[i].ttgt+'.'+c[i].ftgt).offsetTop - document.getElementById(c[i].ttgt).parentNode.parentNode.scrollTop +he;
 			}
-		}else{
+		} else{
 			//xe=document.getElementById(c[i].ttgt).offsetLeft;
 			// if ccs <td style="position:relative"...
 			xe=document.getElementById(c[i].tsrc).parentNode.offsetLeft + document.getElementById(c[i].ttgt).offsetLeft;
@@ -142,6 +144,50 @@ function reconnect(){
 		context.stroke();
 	}
 
+	/* paint related and duplicate tasks */
+	for (i = 0, len = r.length; i < len; ++i) {
+		context.beginPath();
+		if(r[i].dup==1){
+			context.strokeStyle = "rgba(151,151,151,1)";
+		} else{
+			context.strokeStyle = "rgba(0,102,201,1)";
+		}
+		if(document.getElementById(r[i].tsrc).checked){
+			xs=document.getElementById(r[i].tsrc).offsetLeft + document.getElementById(r[i].tsrc).offsetWidth;
+			ys=document.getElementById(r[i].tsrc+'.'+r[i].fsrc).offsetTop - document.getElementById(r[i].tsrc).parentNode.parentNode.scrollTop +hs;
+		} else{
+			//xs=document.getElementById(r[i].tsrc).offsetLeft + document.getElementById(r[i].tsrc).offsetWidth;
+			// if css <td style="position:relative"...
+			xs=document.getElementById(r[i].tsrc).offsetLeft + document.getElementById(r[i].tsrc).parentNode.offsetLeft + document.getElementById(r[i].tsrc).offsetWidth;
+			//ys=document.getElementById(r[i].tsrc).offsetTop - document.getElementById(r[i].tsrc).parentNode.scrollTop+hs;
+			ys=document.getElementById(r[i].tsrc).parentNode.offsetTop + document.getElementById(r[i].tsrc).offsetTop +hs;
+		}
+
+		if(document.getElementById(r[i].ttgt).checked){
+			xe=document.getElementById(r[i].ttgt).parentNode.offsetLeft;
+			if(document.getElementById(r[i].ttgt).parentNode.parentNode.classList[0]=='group'){
+				ye=document.getElementById('jtl.'+r[i].ttgt+'.'+r[i].ftgt).offsetTop - document.getElementById(r[i].ttgt).parentNode.parentNode.parentNode.scrollTop +he;
+			}else{
+				ye=document.getElementById('jtl.'+r[i].ttgt+'.'+r[i].ftgt).offsetTop - document.getElementById(r[i].ttgt).parentNode.parentNode.scrollTop +he;
+			}
+		} else{
+			//xe=document.getElementById(r[i].ttgt).offsetLeft;
+			// if ccs <td style="position:relative"...
+			xe=document.getElementById(r[i].tsrc).parentNode.offsetLeft + document.getElementById(r[i].ttgt).offsetLeft;
+			if(document.getElementById(r[i].ttgt).parentNode.parentNode.classList[0]=='group'){
+				ye=document.getElementById(r[i].ttgt).parentNode.offsetTop - document.getElementById(r[i].ttgt).parentNode.parentNode.parentNode.scrollTop +he;
+				ye=document.getElementById(r[i].ttgt).parentNode.offsetTop - document.getElementById(r[i].ttgt).parentNode.parentNode.parentNode.scrollTop +he;
+			}else{
+				//ye=document.getElementById(r[i].ttgt).offsetTop - document.getElementById(r[i].ttgt).parentNode.scrollTop +he;
+				ye=document.getElementById(r[i].ttgt).parentNode.offsetTop + document.getElementById(r[i].ttgt).offsetTop +he;
+			}
+		}
+		context.moveTo(xs, ys);
+		context.bezierCurveTo((xs+xe)/2, ys, (xs+xe)/2, ye, xe, ye);
+		context.stroke();
+	}
+
+	/* paint deadlines */
 	for (i = 0, len = due.length; i < len; ++i) {
 		context.beginPath();
 		context.strokeStyle = "rgba(255,127,0,1)";
