@@ -1,13 +1,22 @@
 <?php
+/*
+	Author: Peter Liscovius
+*/
 
 if (!defined('IN_FS')) {
 	die('Do not access this file directly.');
+}
+
+if (!$user->perms('view_reports')) {
+	Flyspray::show_error(28);
 }
 
 
 if (!$user->can_view_project($proj->id)) {
 	$proj = new Project(0);
 }
+
+
 
 // Get the visibility state of all columns
 $visible = explode(' ', trim($proj->id ? $proj->prefs['visible_columns'] : $fs->prefs['visible_columns']));
@@ -33,7 +42,7 @@ if( "mysql"==substr($db->dbtype, 0, 5) ){
 } else{
 	die($db->dbtype);
 }
-# Limited to 3 Levels, extend and in tree.tpl for more if you really have deeper nested tasks.
+# Limited to 3 Levels, extend and in gantt.tpl for more if you really have deeper nested tasks.
 $result=$db->Query('SELECT
 	t1.task_id AS t1id,t1.project_id AS t1project,t1.task_type AS t1tasktype, t1.is_closed AS t1closed,
 	t1.item_summary AS t1summary, t1.item_status AS t1status, t1.product_category AS t1category,
