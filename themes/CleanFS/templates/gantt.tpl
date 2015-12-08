@@ -8,6 +8,7 @@ require_once('permicons.tpl'); ?>
 #tasklist_table thead {overflow:hidden;text-overflow:hidden;}
 #tasklist_table td, #tasklist_table th{line-height:1;padding-right:4px;padding-left:4px;width:60px;white-space:nowrap;overflow:hidden;max-width:60px;}
 #tasklist_table td.avatar {padding:0;}
+#tasklist_table th {background:rgba(255,255,255,0.4);}
 td.avatar a i { color:#ccc;padding-left:2px;vertical-align:top; }
 td.gantt { position:relative;min-width:1000px; }
 .gt{display:inline-block;width:4px;position:absolute;top:0;background-color:#0cf;border-radius:2px;}
@@ -17,9 +18,9 @@ tr.closed {opacity:0.4;}
 tr.closed a {text-decoration:line-through;}
 #mycanvas{position:absolute;top:0;left:0;z-index:-1;}
 
-#colmenu ~ input[type="checkbox"], #colmenu ~ label {display:none;}
+#colmenu ~ input[type="checkbox"], #colmenu ~ input[type="radio"], #colmenu ~ label {display:none;}
 #colmenu + label {display:inline-block;}
-#colmenu:checked ~ input[type="checkbox"], #colmenu:checked ~ label {display:inline-block;}
+#colmenu:checked ~ input[type="checkbox"], #colmenu:checked ~ input[type="radio"], #colmenu:checked ~ label {display:inline-block;}
 
 col.id,
 col.project,
@@ -108,15 +109,25 @@ col.estimatedeffort{
 #showall:checked ~ table col.os,         #os:checked ~ table col.os,
 #showall:checked ~ table col.effort,     #effort:checked ~ table col.effort,
 #showall:checked ~ table col.estimatedeffort, #estimatedeffort:checked ~ table col.estimatedeffort {
-  visibility:visible;
+	visibility:visible;
 }
+
+#hideall, #showall, #unset {visibility:collapse;position:absolute;}
+
+#colmenu ~ #hidealllabel, #colmenu ~ #showalllabel, #colmenu ~ #unsetlabel {display:none;}
+#hideall:checked ~ #showalllabel {display:inline;padding:2px;border:none;}
+#showall:checked ~ #unsetlabel   {display:inline;padding:2px;border:none;}
+#unset:checked   ~ #hidealllabel {display:inline;padding:2px;border:none;}
+
 </style>
 <input type="checkbox" name="colmenu" id="colmenu">
 <label for="colmenu"><?php echo L('customize'); ?></label>
-<input type="checkbox" name="hideall" id="hideall">
-<label for="hideall"><?php echo L('alloff'); ?></label>
-<input type="checkbox" name="showall" id="showall">
-<label for="showall"><?php echo L('all'); ?></label>
+<input type="radio" name="show" id="hideall">
+<input type="radio" name="show" id="showall">
+<input type="radio" name="show" id="unset" checked="checked">
+<label class="button" for="hideall" id="hidealllabel"><?php echo L('hide'); ?></label>
+<label class="button" for="showall" id="showalllabel"><?php echo L('show'); ?></label>
+<label class="button" for="unset" id="unsetlabel"><?php echo L('custom'); ?></label>
 <input type="checkbox" name="id" id="id"<?php echo array_search('id',$visible)!==false ? ' checked="checked"':''; ?>>
 <label for="id"><?php echo L('id'); ?></label>
 <input type="checkbox" name="project" id="project"<?php echo array_search('project',$visible)!==false ? ' checked="checked"':''; ?>>
@@ -206,6 +217,7 @@ endforeach; ?>
 </thead>
 <tbody>
 <?php
+
 # maybe rainbow generator with size:  count(*) ... GROUP BY supertask_id ...
 $n=2;
 $r=255;
@@ -282,7 +294,7 @@ foreach ($tasks as $task_details):
 			if($col == 'progress'){
 				echo ' class="task_progress" style="min-width:50px;"'; 
 			} elseif($col=='id') {
-				echo ' style="background-color:'.$bg[$bgi].'"'; 
+				echo ' style="background-color:'.$bg[($bgi%8)].'"'; 
 			} elseif($col=='openedby' || $col=='editedby' || $col=='closedby' || $col=='assignedto') {
 				echo ' class="avatar"';
 			} elseif($col=='severity' || $col=='priority') {
@@ -346,7 +358,7 @@ foreach ($tasks as $task_details):
 			if($col == 'progress'){
 				echo ' class="task_progress" style="min-width:50px;"'; 
 			} elseif($col=='id') {
-				echo ' style="background-color:'.$bg[$bgi].';padding-left:20px;"'; 
+				echo ' style="background-color:'.$bg[($bgi%8)].';padding-left:20px;"'; 
 			} elseif($col=='openedby' || $col=='editedby' || $col=='closedby' || $col=='assignedto') {
 				echo ' class="avatar"';
 			} elseif($col=='severity' || $col=='priority') {
@@ -409,11 +421,11 @@ foreach ($tasks as $task_details):
 		</td>
 		<?php else: ?>
 		<td<?php 
-			if(    $col=='id' && $l==2){ echo ' style="padding-left:0px;background-color:'.$bg[$bgi].';"'; }
-			elseif($col=='id' && $l==3){ echo ' style="padding-left:40px;background-color:'.$bg[$bgi].';"'; }
+			if(    $col=='id' && $l==2){ echo ' style="padding-left:0px;background-color:'.$bg[($bgi%8)].';"'; }
+			elseif($col=='id' && $l==3){ echo ' style="padding-left:40px;background-color:'.$bg[($bgi%8)].';"'; }
 			elseif($l==1) { echo ' style="border-top:1px solid #bbb;'; }
 	
-			if( $col=='id' && $l==1){ echo 'background-color:'.$bg[$bgi].';'; }
+			if( $col=='id' && $l==1){ echo 'background-color:'.$bg[($bgi%8)].';'; }
 			if( $l==1){ echo '"';}
 		
 			if ($col=='openedby' || $col=='editedby' || $col=='closedby' || $col=='assignedto') {
@@ -476,8 +488,8 @@ window.onload=init();</script>
 TODO:
 <ul>
 <li>private task with public subtasks - private task rendered as "ghost" without detailed information</li>
-<li>thin (orange?) duedate line "task-------|"</li>
-<li>thin red overdue line   "|------today"</li>
+<li><s class="fa fa-check">thin duedate line</s></li>
+<li><s class="fa fa-check">red overdue line</s></li>
 <li>dependency/blockers: automatic timeshifted positioning of tasks</li>
 <li>priority timeshifted positioning - horizontal floating</li>
 <li class="fa fa-check"><s>severity positioning/upfloating; subtasks just within their supertask group</s></li>
