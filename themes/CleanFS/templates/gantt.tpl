@@ -243,6 +243,7 @@ $bgi=0;
 $r=0;
 $lastsuper=-1;
 $c=array(); # fuer canvas dependency lines
+$related=array(); # fuer canvas related tasks lines
 $due=array(); # fuer Anzeige Fertigstellungstermine
 
 # We must loop at least one additional time for filtering closed and private status and layouting timeline.
@@ -286,6 +287,12 @@ foreach ($tasks as $task_details):
 			$deps=explode(',', $task_details['t1dep']);
 			foreach($deps as $dep){
 				$c[]='{step: "1", tsrc:"t'.$dep.'", fsrc:"", ttgt:"t'.$task_details['t1id'].'", ftgt:""}';
+			}
+		}
+		if( $task_details['t'.$l.'rel']!=''){
+			$rels=explode(',', $task_details['t1rel']);
+			foreach($rels as $rel){
+				$related[]='{step: "1", tsrc:"t'.$rel.'", fsrc:"", ttgt:"t'.$task_details['t1id'].'", ftgt:""}';
 			}
 		}
 
@@ -352,6 +359,12 @@ foreach ($tasks as $task_details):
 				$c[]='{step: "1", tsrc:"t'.$dep.'", fsrc:"", ttgt:"t'.$task_details['t2id'].'", ftgt:""}';
 			}
 		}
+		if( $task_details['t'.$l.'rel']!=''){
+			$rels=explode(',', $task_details['t2rel']);
+			foreach($rels as $rel){
+				$related[]='{step: "1", tsrc:"t'.$rel.'", fsrc:"", ttgt:"t'.$task_details['t2id'].'", ftgt:""}';
+			}
+		}
 
 		foreach ($visible as $col): ?>
 		<td<?php
@@ -411,6 +424,12 @@ foreach ($tasks as $task_details):
 		$deps=explode(',', $task_details['t'.$l.'dep']);
 		foreach($deps as $dep){
 			$c[]='{step: "1", tsrc:"t'.$dep.'", fsrc:"", ttgt:"t'.$task_details['t'.$l.'id'].'", ftgt:""}';
+		}
+	}
+	if( $task_details['t'.$l.'rel']!=''){
+		$rels=explode(',', $task_details['t'.$l.'rel']);
+		foreach($rels as $rel){
+			$related[]='{step: "1", tsrc:"t'.$rel.'", fsrc:"", ttgt:"t'.$task_details['t'.$l.'id'].'", ftgt:""}';
 		}
 	}
 
@@ -481,6 +500,7 @@ foreach ($tasks as $task_details):
 var canvas;
 var context;
 c=[ <?php echo implode(',', $c); ?> ];
+r=[ <?php echo implode(',', $related); ?> ];
 due=[ <?php echo implode(',', $due); ?> ];
 today=<?php echo time(); ?>;
 window.onload=init();</script>
