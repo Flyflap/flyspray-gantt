@@ -47,45 +47,76 @@ col.comments,
 col.votes,
 col.os,
 col.effort,
-col.estimatedeffort {
+col.estimatedeffort{
 	visibility:collapse;
 }
 
-#hide:checked ~ table col.id,         #id:checked ~ table col.id,
-#hide:checked ~ table col.project,    #project:checked ~ table col.project,
-#hide:checked ~ table col.summary,    #summary:checked ~ table col.summary,
-#hide:checked ~ table col.parent,     #parent:checked ~ table col.parent,
-#hide:checked ~ table col.priority,   #priority:checked ~ table col.priority,
-#hide:checked ~ table col.category,   #category:checked ~ table col.category,
-#hide:checked ~ table col.severity,   #severity:checked ~ table col.severity,
-#hide:checked ~ table col.tasktype,   #tasktype:checked ~ table col.tasktype,
-#hide:checked ~ table col.progress,   #progress:checked ~ table col.progress,
-#hide:checked ~ table col.status,     #status:checked ~ table col.status,
-#hide:checked ~ table col.dateclosed, #dateclosed:checked ~ table col.dateclosed,
-#hide:checked ~ table col.private,    #private:checked ~ table col.private,
-#hide:checked ~ table col.openedby,   #openedby:checked ~ table col.openedby,
-#hide:checked ~ table col.editedby,   #editedby:checked ~ table col.editedby,
-#hide:checked ~ table col.closedby,   #closedby:checked ~ table col.closedby,
-#hide:checked ~ table col.attachments,#attachments:checked ~ table col.attachments,
-#hide:checked ~ table col.assignedto, #assignedto:checked ~ table col.assignedto,
-#hide:checked ~ table col.lastedit,   #lastedit:checked ~ table col.lastedit,
-#hide:checked ~ table col.dateopened, #dateopened:checked ~ table col.dateopened,
-#hide:checked ~ table col.dueversion, #dueversion:checked ~ table col.dueversion,
-#hide:checked ~ table col.duedate,    #duedate:checked ~ table col.duedate,
-#hide:checked ~ table col.reportedin, #reportedin:checked ~ table col.reportedin,
-#hide:checked ~ table col.comments,   #comments:checked ~ table col.comments,
-#hide:checked ~ table col.votes,      #votes:checked ~ table col.votes,
-#hide:checked ~ table col.os,         #os:checked ~ table col.os,
-#hide:checked ~ table col.effort,     #effort:checked ~ table col.effort,
-#hide:checked ~ table col.estimatedeffort, #estimatedeffort:checked ~ table col.estimatedeffort
-{
+#hideall:checked ~ table col.id,
+#hideall:checked ~ table col.project,
+#hideall:checked ~ table col.summary,
+#hideall:checked ~ table col.parent,
+#hideall:checked ~ table col.priority,
+#hideall:checked ~ table col.category,
+#hideall:checked ~ table col.severity,
+#hideall:checked ~ table col.tasktype,
+#hideall:checked ~ table col.progress,
+#hideall:checked ~ table col.status,
+#hideall:checked ~ table col.dateclosed,
+#hideall:checked ~ table col.private,
+#hideall:checked ~ table col.openedby,
+#hideall:checked ~ table col.editedby,
+#hideall:checked ~ table col.closedby,
+#hideall:checked ~ table col.attachments,
+#hideall:checked ~ table col.assignedto,
+#hideall:checked ~ table col.lastedit,
+#hideall:checked ~ table col.dateopened,
+#hideall:checked ~ table col.dueversion,
+#hideall:checked ~ table col.duedate,
+#hideall:checked ~ table col.reportedin,
+#hideall:checked ~ table col.comments,
+#hideall:checked ~ table col.votes,
+#hideall:checked ~ table col.os,
+#hideall:checked ~ table col.effort,
+#hideall:checked ~ table col.estimatedeffort {
+	visibility:collapse !important;
+}
+
+#showall:checked ~ table col.id,         #id:checked ~ table col.id,
+#showall:checked ~ table col.project,    #project:checked ~ table col.project,
+#showall:checked ~ table col.summary,    #summary:checked ~ table col.summary,
+#showall:checked ~ table col.parent,     #parent:checked ~ table col.parent,
+#showall:checked ~ table col.priority,   #priority:checked ~ table col.priority,
+#showall:checked ~ table col.category,   #category:checked ~ table col.category,
+#showall:checked ~ table col.severity,   #severity:checked ~ table col.severity,
+#showall:checked ~ table col.tasktype,   #tasktype:checked ~ table col.tasktype,
+#showall:checked ~ table col.progress,   #progress:checked ~ table col.progress,
+#showall:checked ~ table col.status,     #status:checked ~ table col.status,
+#showall:checked ~ table col.dateclosed, #dateclosed:checked ~ table col.dateclosed,
+#showall:checked ~ table col.private,    #private:checked ~ table col.private,
+#showall:checked ~ table col.openedby,   #openedby:checked ~ table col.openedby,
+#showall:checked ~ table col.editedby,   #editedby:checked ~ table col.editedby,
+#showall:checked ~ table col.closedby,   #closedby:checked ~ table col.closedby,
+#showall:checked ~ table col.attachments,#attachments:checked ~ table col.attachments,
+#showall:checked ~ table col.assignedto, #assignedto:checked ~ table col.assignedto,
+#showall:checked ~ table col.lastedit,   #lastedit:checked ~ table col.lastedit,
+#showall:checked ~ table col.dateopened, #dateopened:checked ~ table col.dateopened,
+#showall:checked ~ table col.dueversion, #dueversion:checked ~ table col.dueversion,
+#showall:checked ~ table col.duedate,    #duedate:checked ~ table col.duedate,
+#showall:checked ~ table col.reportedin, #reportedin:checked ~ table col.reportedin,
+#showall:checked ~ table col.comments,   #comments:checked ~ table col.comments,
+#showall:checked ~ table col.votes,      #votes:checked ~ table col.votes,
+#showall:checked ~ table col.os,         #os:checked ~ table col.os,
+#showall:checked ~ table col.effort,     #effort:checked ~ table col.effort,
+#showall:checked ~ table col.estimatedeffort, #estimatedeffort:checked ~ table col.estimatedeffort {
   visibility:visible;
 }
 </style>
 <input type="checkbox" name="colmenu" id="colmenu">
 <label for="colmenu"><?php echo L('customize'); ?></label>
-<input type="checkbox" name="hide" id="hide">
-<label for="hide"><?php echo L('all'); ?></label>
+<input type="checkbox" name="hideall" id="hideall">
+<label for="hideall"><?php echo L('alloff'); ?></label>
+<input type="checkbox" name="showall" id="showall">
+<label for="showall"><?php echo L('all'); ?></label>
 <input type="checkbox" name="id" id="id"<?php echo array_search('id',$visible)!==false ? ' checked="checked"':''; ?>>
 <label for="id"><?php echo L('id'); ?></label>
 <input type="checkbox" name="project" id="project"<?php echo array_search('project',$visible)!==false ? ' checked="checked"':''; ?>>
@@ -152,7 +183,8 @@ col.estimatedeffort {
 <colgroup width="100%"><col /></colgroup>
 <thead>
 <tr>
-<?php foreach ($visible as $col):
+<?php 
+foreach ($visible as $col):
 		if($col=='progress'): echo '<th style="width:50px;">'.Filters::noXSS(L($col)).'</th>';
 		elseif($col=='comments'): echo '<th style="width:50px;" title="'.eL('comments').'"><i class="fa fa-comments"></i></th>';
 		elseif($col=='dateopened'): echo '<th style="width:60px;" title="'.eL('opened').'"><i class="fa fa-calendar-o"></i></th>';
@@ -411,7 +443,7 @@ foreach ($tasks as $task_details):
 		<?php endif; ?>
 		<?php endforeach; ?>
 	<td class="gantt" style="<?php if( $l==1): echo 'border-top:1px solid #bbb;'; endif; ?>">
-		<div class="gt" style="<?php echo $task_details['t'.$l.'dep'] ? 'left:500px;' : 'left:'.rand(0,100).'px'; ?>" id="t<?php echo $task_details['t'.$l.'id']; ?>">
+		<div class="gt" style="width:50px;<?php echo $task_details['t'.$l.'dep'] ? 'left:400px;' : 'left:'.rand(10,10).'px'; ?>" id="t<?php echo $task_details['t'.$l.'id']; ?>">
 			<a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t'.$l.'id'])); ?>"><?php echo Filters::noXSS($task_details['t'.$l.'summary']); ?></a>
 		</div>
 		<?php
@@ -438,6 +470,7 @@ var canvas;
 var context;
 c=[ <?php echo implode(',', $c); ?> ];
 due=[ <?php echo implode(',', $due); ?> ];
+today=<?php echo time(); ?>;
 window.onload=init();</script>
 <div>
 TODO:
