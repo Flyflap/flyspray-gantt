@@ -321,7 +321,7 @@ foreach ($tasks as $task_details):
 			<?php elseif ($col=='openedby' || $col=='editedby' || $col=='closedby'): ?><?php echo ($task_details['t1'.$col]> 0) ? tpl_userlinkavatar($task_details['t1'.$col],24):''; ?>
 			<?php elseif ($col=='assignedto'): ?><?php
 				$assis=explode(',',$task_details['t1'.$col]);
-				foreach($assis as $a){ echo tpl_userlinkavatar($a,24);}
+				foreach($assis as $a){ echo $a>0 ? tpl_userlinkavatar($a,24):''; }
 			 ?>
 			<?php elseif ($col=='dateopened' || $col=='lastedit' || $col=='duedate' || $col=='dateclosed'): ?><?php echo ($task_details['t1'.$col]> 0) ? formatDate($task_details['t1'.$col],true):''; ?>
 			<?php elseif ($col=='summary'): ?>
@@ -389,7 +389,7 @@ foreach ($tasks as $task_details):
 			<?php elseif ($col=='openedby' || $col=='editedby' || $col=='closedby'): ?><?php echo ($task_details['t2'.$col]> 0) ? tpl_userlinkavatar($task_details['t2'.$col],24):''; ?>
 			<?php elseif ($col=='assignedto'): ?><?php
 				$assis=explode(',',$task_details['t2'.$col]);
-				foreach($assis as $a){ echo tpl_userlinkavatar($a,24);}
+				foreach($assis as $a){ echo $a>0 ? tpl_userlinkavatar($a,24):''; }
 			 ?>
 			<?php elseif ($col=='dateopened' || $col=='lastedit' || $col=='duedate' || $col=='dateclosed'): ?><?php echo ($task_details['t2'.$col]> 0) ? formatDate($task_details['t2'.$col],true):''; ?>
 			<?php elseif ($col=='summary'): ?>
@@ -460,7 +460,7 @@ foreach ($tasks as $task_details):
 			<?php elseif ($col=='openedby' || $col=='editedby' || $col=='closedby'): ?><?php echo ($task_details['t'.$l.$col]> 0) ? tpl_userlinkavatar($task_details['t'.$l.$col],24):''; ?>
 			<?php elseif ($col=='assignedto'): ?><?php
 				$assis=explode(',',$task_details['t'.$l.$col]);
-				foreach($assis as $a){ echo tpl_userlinkavatar($a,24);}
+				foreach($assis as $a){ echo $a>0 ? tpl_userlinkavatar($a,24):''; }
 			 ?>
 			<?php elseif ($col=='dateopened' || $col=='lastedit' || $col=='duedate' || $col=='dateclosed'): ?><?php echo ($task_details['t'.$l.$col]> 0) ? formatDate($task_details['t'.$l.$col],true):''; ?>
 			<?php elseif ($col=='summary'): ?><a href="<?php echo Filters::noXSS(CreateURL('details', $task_details['t'.$l.'id'])); ?>"><?php echo Filters::noXSS($task_details['t'.$l.$col]); ?></a>
