@@ -119,9 +119,24 @@ col.estimatedeffort{
 #showall:checked ~ #unsetlabel   {display:inline;padding:2px;border:none;}
 #unset:checked   ~ #hidealllabel {display:inline;padding:2px;border:none;}
 
+#hideclosed:checked ~ table tr.closed {visibility:collapse;}
+#hideprivate:checked ~ table tr.private {visibility:collapse;}
+#hidesubs:checked ~ table tr.sub {visibility:collapse;}
+
 </style>
+
 <input type="checkbox" name="colmenu" id="colmenu">
 <label for="colmenu"><?php echo L('customize'); ?></label>
+
+<input type="checkbox" name="hideclosed" id="hideclosed">
+<label for="hideclosed" id="hideclosedlabel"><?php echo L('hideclosed'); ?></label>
+
+<input type="checkbox" name="hideprivate" id="hideprivate">
+<label for="hideprivate" id="hideprivatelabel"><?php echo L('hideprivate'); ?></label>
+
+<input type="checkbox" name="hidesubs" id="hidesubs">
+<label for="hidesubs" id="hidesubslabel"><?php echo L('hidesubs'); ?></label>
+
 <input type="radio" name="show" id="hideall">
 <input type="radio" name="show" id="showall">
 <input type="radio" name="show" id="unset" checked="checked">
@@ -189,7 +204,6 @@ col.estimatedeffort{
 	<?php foreach ($visible as $col): ?>
         <col class="<?php echo $col; ?>" />
         <?php endforeach; ?>
-	<col />
 </colgroup>
 <colgroup width="100%"><col /></colgroup>
 <thead>
@@ -341,9 +355,6 @@ foreach ($tasks as $task_details):
 			endif; 
 			?>
 		</td>
-		<td id="desc_<?php echo $task_details['t1id']; ?>" class="descbox"><b><?php echo L('taskdescription'); ?></b>
-		<?php echo $task_details['t1detailed_desc'] ? TextFormatter::render($task_details['t1detailed_desc'], 'task', $task_details['t1id'], $task_details['desccache']) : '<p>'.L('notaskdescription').'</p>'; ?>
-		</td>
     		</tr>
 	<?php 
 
@@ -409,16 +420,13 @@ foreach ($tasks as $task_details):
 			?>
 			</div>
 		</td>
-		<td id="desc_<?php echo $task_details['t2id']; ?>" class="descbox"><b><?php echo L('taskdescription'); ?></b>
-		<?php echo $task_details['t2detailed_desc'] ? TextFormatter::render($task_details['t2detailed_desc'], 'task', $task_details['t2id'], $task_details['desccache']) : '<p>'.L('notaskdescription').'</p>'; ?>
-		</td>
     		</tr>
 	<?php 
 		$sl=0;
 	endif;
 	?>
 
-	<tr id="task<?php echo $task_details['t'.$l.'id']; ?>" class="sev<?php echo Filters::noXSS($task_details['t'.$l.'severity']); echo $task_details['t'.$l.'closed']==1 ? ' closed':''; echo $task_details['t'.$l.'private']==1 ? ' private':''; ?>">
+	<tr id="task<?php echo $task_details['t'.$l.'id']; ?>" class="<?php echo ($l==2 || $l==3)? 'sub ':''; ?>sev<?php echo Filters::noXSS($task_details['t'.$l.'severity']); echo $task_details['t'.$l.'closed']==1 ? ' closed':''; echo $task_details['t'.$l.'private']==1 ? ' private':''; ?>">
 	<?php
 	if( $task_details['t'.$l.'dep']!=''){
 		$deps=explode(',', $task_details['t'.$l.'dep']);
@@ -482,9 +490,6 @@ foreach ($tasks as $task_details):
 			$due[]='{ tsrc:"t'.$task_details['t'.$l.'id'].'", duetime:"'.$task_details['t'.$l.'duedate'].'"}';
 		endif; 
 		?>
-	</td>
-	<td id="desc_<?php echo $task_details['t'.$l.'id']; ?>" class="descbox"><b><?php echo L('taskdescription'); ?></b>
-	<?php echo $task_details['t'.$l.'detailed_desc'] ? TextFormatter::render($task_details['t'.$l.'detailed_desc'], 'task', $task_details['t'.$l.'id'], $task_details['t'.$l.'desccache']) : '<p>'.L('notaskdescription').'</p>'; ?>
 	</td>
 	</tr>
 <?php
