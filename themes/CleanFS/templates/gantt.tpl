@@ -362,7 +362,7 @@ foreach ($tasks as $task_details):
 		endif;
 
 	if ($sl==1 && $l==3): ?>
-	<tr id="task<?php echo $task_details['t2id']; ?>" class="sev<?php echo Filters::noXSS($task_details['t2severity']); echo $task_details['t'.$l.'closed']==1 ? ' closed':''; echo $task_details['t2private']==1 ? ' private':'';?>">
+	<tr id="task<?php echo $task_details['t2id']; ?>" class="<?php echo ($l==3)? 'sub ':''; ?>sev<?php echo Filters::noXSS($task_details['t2severity']); echo $task_details['t'.$l.'closed']==1 ? ' closed':''; echo $task_details['t2private']==1 ? ' private':'';?>">
 		<?php
 		if( $task_details['t'.$l.'dep']!=''){
 			$deps=explode(',', $task_details['t2dep']);
