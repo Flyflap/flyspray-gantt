@@ -124,7 +124,7 @@ col.estimatedeffort{
 #hidesubs:checked ~ table tr.sub {visibility:collapse;}
 
 </style>
-
+<div>
 <input type="checkbox" name="colmenu" id="colmenu">
 <label for="colmenu"><?php echo L('customize'); ?></label>
 
@@ -531,4 +531,5 @@ TODO:
 <li>drag task out of a supertask (subsubtask follow the dragged out task..)</li>
 <li>visualize estimated times of roadmaps/milestones</li>
 </ul>
+</div>
 </div>
