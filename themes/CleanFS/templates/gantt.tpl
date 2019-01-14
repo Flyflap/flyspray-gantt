@@ -123,8 +123,12 @@ col.estimatedeffort{
 #hideprivate:checked ~ table tr.private {visibility:collapse;}
 #hidesubs:checked ~ table tr.sub {visibility:collapse;}
 
+#gantt #colmenu { display:none;}
+#gantt #colmenu:checked ~ input[type="checkbox"] { display:none;}
+#gantt > input[type="checkbox"] + label { border-radius: 2px; border:1px solid #ccc; padding-left:3px;padding-right:3px; margin:4px;background-color:#ddd;}
+#gantt > input[type="checkbox"]:checked + label{ background-color:#ff0;}
 </style>
-<div>
+<div id="gantt">
 <input type="checkbox" name="colmenu" id="colmenu">
 <label for="colmenu"><?php echo L('customize'); ?></label>
 
